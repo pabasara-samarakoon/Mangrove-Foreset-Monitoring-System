@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "3xBVgTmdL6A=",
+  "dgSpecHash": "Z6uVXgJVV20=",
   "success": true,
-  "projectFilePath": "D:\\univ\\Year 4\\systemNetworkAdministration\\MangroveForestMonitoringSystem\\backend\\EMS\\EMS.csproj",
+  "projectFilePath": "D:\\univ\\Year 4\\systemNetworkAdministration\\Mangrove-Foreset-Monitoring-System\\backend\\EMS\\EMS.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\USER\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

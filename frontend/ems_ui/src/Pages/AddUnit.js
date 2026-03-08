@@ -1,79 +1,145 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../Components/AuthContext";
 
-function AddUnitForm(){
-    const [UnitName, setUnitname] = useState("");
-    const [UnitDescription, setUnitdescription] = useState("");
-    const [Location, setUnitlocation] = useState("");
-    const navigate = useNavigate();
+function AddUnitForm() {
+  const [unitName, setUnitname] = useState("");
+  const [unitDescription, setUnitdescription] = useState("");
+  const [location, setUnitlocation] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+  const [loading, setLoading] = useState(false);
 
-      const handleSubmit = async (e) => {
-    e.preventDefault(); // stop page reload
-    
-    const response = await fetch("http://localhost:5000/Data/AddUnit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        unitname: UnitName,
-        unitdescription : UnitDescription,
-        location : Location
-      })
-    });
-    if (response.ok) {
-        console.log("ok");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await fetch("http://localhost:5000/Data/AddUnit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          unitname: unitName,
+          unitdescription: unitDescription,
+          location: location
+        })
+      });
+
+      if (response.ok) {
+        setMessage("Unit added successfully.");
+        setMessageType("success");
+
+        setUnitname("");
+        setUnitdescription("");
+        setUnitlocation("");
+
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1200);
       } else {
-        console.log("bad response");
+        setMessage("Failed to add unit.");
+        setMessageType("danger");
       }
-
-//const res = await fetch("http://localhost:5000/User/whoami", {
-   //   credentials: "include"
-   // });
-
-    
-//const data = await res.json(); // parse JSON
-//setUser(data);
-
-//console.log("Username:", data.username); 
+    } catch (error) {
+      setMessage("Server error. Please try again.");
+      setMessageType("danger");
+    } finally {
+      setLoading(false);
+    }
   };
-    return(
-        <div>
-            <center>
-                <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Name:</label><br />
-                    <input
-                        type="text"
-                        value={UnitName}
-                        onChange={e =>  setUnitname(e.target.value)}
-                     />
+
+  return (
+    <div className="container py-5">
+      <div className="row justify-content-center">
+        <div className="col-md-8 col-lg-6">
+          <div className="card shadow border-0 rounded-4">
+            <div
+              className="card-header text-white text-center py-4 rounded-top-4"
+              style={{
+                background: "linear-gradient(135deg, #10b981 0%, #059669 100%)"
+              }}
+            >
+              <h3 className="mb-1">➕ Add Sensor Unit</h3>
+              <p className="mb-0 small">Create a new unit for environmental monitoring</p>
+            </div>
+
+            <div className="card-body p-4">
+              {message && (
+                <div className={`alert alert-${messageType}`} role="alert">
+                  {message}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label className="form-label fw-semibold">Unit Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={unitName}
+                    onChange={(e) => setUnitname(e.target.value)}
+                    placeholder="Enter unit name"
+                    required
+                  />
                 </div>
 
-                <div>
-                    <label>Description:</label><br />
-                    <input
-                        type="text"
-                        value={UnitDescription}
-                        onChange={e =>  setUnitdescription(e.target.value)}
-                     />
+                <div className="mb-3">
+                  <label className="form-label fw-semibold">Description</label>
+                  <textarea
+                    className="form-control"
+                    rows="3"
+                    value={unitDescription}
+                    onChange={(e) => setUnitdescription(e.target.value)}
+                    placeholder="Enter unit description"
+                    required
+                  ></textarea>
                 </div>
 
-                <div>
-                    <label>Location:</label><br />
-                    <input
-                        type="text"
-                        value={Location}
-                        onChange={e =>  setUnitlocation(e.target.value)}
-                     />
+                <div className="mb-4">
+                  <label className="form-label fw-semibold">Location</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={location}
+                    onChange={(e) => setUnitlocation(e.target.value)}
+                    placeholder="Enter location"
+                    required
+                  />
                 </div>
-                <button type="submit">Submit</button>
-                </form>
-            </center>
+
+                <div className="d-flex gap-2">
+                  <button
+                    type="submit"
+                    className="btn btn-success w-100"
+                    disabled={loading}
+                  >
+                    {loading ? "Saving..." : "Save Unit"}
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary w-100"
+                    onClick={() => navigate("/dashboard")}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <div className="card-footer text-muted text-center small bg-white border-0 pb-4">
+              Mangrove Forest Monitoring System
+            </div>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 export default AddUnitForm;

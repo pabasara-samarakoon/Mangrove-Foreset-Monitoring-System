@@ -13,13 +13,18 @@ import PrivateRoute from "./Components/PrivateRoute";
 import Layout from './Components/Layout';
 import Dashboard from './Pages/Dashboard';
 import UnitDashboard from './Pages/UnitDashboard';
+import Alerts from "./Pages/Alerts";
+import Reports from "./Pages/Reports";
+
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route element={<Layout />}>
-         
+          <Route path="/dashboard" element={ <PrivateRoute> <Dashboard /> </PrivateRoute>}/>
+          <Route path="/alerts"element={<PrivateRoute><Alerts /></PrivateRoute>}/>
+          <Route path="/reports"element={<PrivateRoute><Reports /></PrivateRoute>}/>
           <Route path="/addunit" element={<PrivateRoute><AddUnit /></PrivateRoute>} />
           <Route path="/addproperty" element={<PrivateRoute><AddProperty /></PrivateRoute>} />
           <Route path="/realtimedata" element={<PrivateRoute><RealTimeData /></PrivateRoute>} />
